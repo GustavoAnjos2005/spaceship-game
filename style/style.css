@@ -1,0 +1,204 @@
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0a0818;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Fira Code', monospace;
+    color: white;
+    overflow: hidden;
+    user-select: none;
+}
+
+#gameContainer {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background: linear-gradient(to bottom, #0a0818, #1a1740, #0a0818);
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(143, 13, 135, 0.7);
+    border: 3px solid #5a0d8f;
+    overflow: hidden;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* UI Elements */
+#uiContainer {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 14px;
+    text-shadow: 0 0 5px rgba(224, 176, 255, 0.7);
+    pointer-events: none;
+}
+
+#healthDisplay {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.health-bar {
+    width: 100px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, #00ff88, #00ccff);
+    transition: width 0.3s;
+}
+
+/* Screens */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(10, 8, 24, 0.95);
+    z-index: 20;
+    text-align: center;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #e0b0ff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(224, 176, 255, 0.5);
+}
+
+h1 {
+    font-size: 3rem;
+    letter-spacing: 3px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+p {
+    margin: 5px 0;
+    color: #b8b8ff;
+}
+
+.controls {
+    margin: 30px 0;
+    line-height: 1.6;
+}
+
+.highlight {
+    color: #e0b0ff;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    background-color: #5a0d8f;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(90, 13, 143, 0.5);
+}
+
+.btn:hover {
+    background-color: #e0b0ff;
+    color: #0a0818;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(224, 176, 255, 0.7);
+}
+
+/* Mobile Controls */
+#mobileControls {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    gap: 20px;
+    z-index: 10;
+}
+
+.mobile-btn {
+    background-color: rgba(90, 13, 143, 0.7);
+    color: white;
+    border: none;
+    width: 80px;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(90, 13, 143, 0.5);
+}
+
+.mobile-btn:active {
+    background-color: #e0b0ff;
+    transform: scale(0.95);
+}
+
+#fireButton {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes explosion {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes powerupGlow {
+    0% { box-shadow: 0 0 10px #e0b0ff; }
+    50% { box-shadow: 0 0 20px #e0b0ff; }
+    100% { box-shadow: 0 0 10px #e0b0ff; }
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+    #gameContainer {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    #mobileControls {
+        display: flex;
+    }
+}

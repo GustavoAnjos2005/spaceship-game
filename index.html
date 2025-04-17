@@ -1,391 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Espacial Roxa - Easter Egg</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #0f0c29;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Fira Code', monospace;
-            color: white;
-            overflow: hidden;
-        }
-        
-        #gameContainer {
-            position: relative;
-            width: 400px;
-            height: 500px;
-            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(143, 13, 135, 0.5);
-            border: 3px solid #8F0D87;
-            overflow: hidden;
-        }
-        
-        #gameCanvas {
-            display: block;
-        }
-        
-        #scoreDisplay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 16px;
-        }
-        
-        #highScoreDisplay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 16px;
-        }
-        
-        #startScreen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(15, 12, 41, 0.9);
-            z-index: 10;
-        }
-        
-        #gameOverScreen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(15, 12, 41, 0.9);
-            z-index: 10;
-        }
-        
-        h1, h2 {
-            color: #E0B0FF;
-            text-align: center;
-        }
-        
-        button {
-            background-color: #8F0D87;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-        
-        button:hover {
-            background-color: #E0B0FF;
-            color: #0f0c29;
-            transform: scale(1.05);
-        }
-        
-        .controls {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-        }
-        
-        .highlight {
-            color: #E0B0FF;
-            font-weight: bold;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Space Raiders - Asteroid Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="400" height="500"></canvas>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
         
-        <div id="scoreDisplay">Pontuação: <span id="score">0</span></div>
-        <div id="highScoreDisplay">Recorde: <span id="highScore">0</span></div>
-        
-        <div id="startScreen">
-            <h1>Nave Espacial Roxa</h1>
-            <p>Evite os asteroides e marque pontos!</p>
-            <div class="controls">
-                <p>Use as teclas <span class="highlight">←</span> e <span class="highlight">→</span> para mover</p>
-                <p>Ou clique nos botões abaixo</p>
+        <div id="uiContainer">
+            <div id="scoreDisplay">SCORE: <span id="score">0</span></div>
+            <div id="highScoreDisplay">RECORD: <span id="highScore">0</span></div>
+            <div id="healthDisplay">
+                <div class="health-bar">
+                    <div class="health-fill"></div>
+                </div>
+                <span>SHIELD: 100%</span>
             </div>
-            <button id="startButton">Iniciar Jogo</button>
+            <div id="weaponDisplay">WEAPON: BASIC</div>
         </div>
         
-        <div id="gameOverScreen">
-            <h2>Game Over!</h2>
-            <p>Sua pontuação: <span id="finalScore">0</span></p>
-            <p>Recorde: <span id="finalHighScore">0</span></p>
-            <button id="restartButton">Jogar Novamente</button>
+        <div id="startScreen" class="screen">
+            <h1>SPACE RAIDERS</h1>
+            <h2>Asteroid Master</h2>
+            <div class="controls">
+                <p>CONTROLS: <span class="highlight">← →</span> TO MOVE | <span class="highlight">SPACE</span> TO SHOOT</p>
+                <p>DESTROY ASTEROIDS AND ENEMIES TO SCORE</p>
+                <p>COLLECT POWER-UPS FOR SPECIAL ABILITIES</p>
+            </div>
+            <button id="startButton" class="btn">START MISSION</button>
         </div>
         
-        <div id="mobileControls" style="position: absolute; bottom: 20px; width: 100%; display: none; justify-content: center; gap: 40px;">
-            <button id="leftButton" style="font-size: 24px;">←</button>
-            <button id="rightButton" style="font-size: 24px;">→</button>
+        <div id="gameOverScreen" class="screen" style="display: none;">
+            <h2>MISSION FAILED</h2>
+            <p>SCORE: <span id="finalScore">0</span></p>
+            <p>RECORD: <span id="finalHighScore">0</span></p>
+            <button id="restartButton" class="btn">RETRY MISSION</button>
+        </div>
+        
+        <div id="mobileControls">
+            <button id="leftButton" class="mobile-btn">←</button>
+            <button id="fireButton" class="mobile-btn">FIRE</button>
+            <button id="rightButton" class="mobile-btn">→</button>
         </div>
     </div>
 
-    <script>
-        // Elementos do DOM
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplay = document.getElementById('score');
-        const highScoreDisplay = document.getElementById('highScore');
-        const startScreen = document.getElementById('startScreen');
-        const gameOverScreen = document.getElementById('gameOverScreen');
-        const finalScoreDisplay = document.getElementById('finalScore');
-        const finalHighScoreDisplay = document.getElementById('finalHighScore');
-        const startButton = document.getElementById('startButton');
-        const restartButton = document.getElementById('restartButton');
-        const mobileControls = document.getElementById('mobileControls');
-        const leftButton = document.getElementById('leftButton');
-        const rightButton = document.getElementById('rightButton');
-        
-        // Variáveis do jogo
-        let player = {
-            x: canvas.width / 2 - 15,
-            y: canvas.height - 60,
-            width: 30,
-            height: 40,
-            speed: 8,
-            color: '#8F0D87'
-        };
-        
-        let asteroids = [];
-        let score = 0;
-        let highScore = localStorage.getItem('spaceHighScore') || 0;
-        let gameRunning = false;
-        let animationId;
-        let lastTime = 0;
-        let asteroidSpawnRate = 2000; // ms
-        let lastAsteroidSpawn = 0;
-        
-        // Atualizar recorde
-        highScoreDisplay.textContent = highScore;
-        
-        // Verificar se é mobile
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-            mobileControls.style.display = 'flex';
-        }
-        
-        // Controles
-        document.addEventListener('keydown', (e) => {
-            if (!gameRunning) return;
-            
-            if (e.key === 'ArrowLeft') {
-                player.x -= player.speed;
-            } else if (e.key === 'ArrowRight') {
-                player.x += player.speed;
-            }
-            
-            // Limitar movimento aos limites do canvas
-            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-        });
-        
-        // Controles mobile
-        leftButton.addEventListener('touchstart', () => {
-            if (gameRunning) player.x -= player.speed;
-        });
-        
-        rightButton.addEventListener('touchstart', () => {
-            if (gameRunning) player.x += player.speed;
-        });
-        
-        // Desenhar a nave
-        function drawPlayer() {
-            ctx.fillStyle = player.color;
-            ctx.beginPath();
-            ctx.moveTo(player.x + player.width / 2, player.y);
-            ctx.lineTo(player.x, player.y + player.height);
-            ctx.lineTo(player.x + player.width, player.y + player.height);
-            ctx.closePath();
-            ctx.fill();
-            
-            // Detalhes da nave
-            ctx.strokeStyle = '#E0B0FF';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-        
-        // Criar asteroide
-        function createAsteroid(timestamp) {
-            const size = Math.random() * 30 + 20;
-            const x = Math.random() * (canvas.width - size);
-            const speed = Math.random() * 3 + 2;
-            const isSpecial = Math.random() < 0.15;
-            
-            asteroids.push({
-                x,
-                y: -size,
-                size,
-                speed,
-                color: isSpecial ? '#E0B0FF' : '#8F0D87',
-                isSpecial
-            });
-            
-            lastAsteroidSpawn = timestamp;
-        }
-        
-        // Desenhar asteroides
-        function drawAsteroids() {
-            asteroids.forEach(asteroid => {
-                ctx.fillStyle = asteroid.color;
-                ctx.beginPath();
-                ctx.arc(asteroid.x + asteroid.size / 2, asteroid.y + asteroid.size / 2, asteroid.size / 2, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Detalhes do asteroide
-                ctx.strokeStyle = asteroid.isSpecial ? '#FFFFFF' : '#E0B0FF';
-                ctx.lineWidth = asteroid.isSpecial ? 2 : 1.5;
-                ctx.stroke();
-            });
-        }
-        
-        // Atualizar asteroides
-        function updateAsteroids() {
-            for (let i = asteroids.length - 1; i >= 0; i--) {
-                asteroids[i].y += asteroids[i].speed;
-                
-                // Verificar colisão com a nave
-                if (
-                    asteroids[i].y + asteroids[i].size > player.y &&
-                    asteroids[i].x < player.x + player.width &&
-                    asteroids[i].x + asteroids[i].size > player.x
-                ) {
-                    endGame();
-                    return;
-                }
-                
-                // Remover asteroides que saíram da tela
-                if (asteroids[i].y > canvas.height) {
-                    score += asteroids[i].isSpecial ? 25 : 10;
-                    scoreDisplay.textContent = score;
-                    asteroids.splice(i, 1);
-                }
-            }
-        }
-        
-        // Loop do jogo
-        function gameLoop(timestamp) {
-            if (!gameRunning) return;
-            
-            // Limpar canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Desenhar fundo estrelado
-            drawStars();
-            
-            // Criar novos asteroides
-            if (timestamp - lastAsteroidSpawn > asteroidSpawnRate) {
-                createAsteroid(timestamp);
-                // Aumentar dificuldade
-                asteroidSpawnRate = Math.max(500, asteroidSpawnRate * 0.99);
-            }
-            
-            // Atualizar e desenhar elementos
-            updateAsteroids();
-            drawAsteroids();
-            drawPlayer();
-            
-            animationId = requestAnimationFrame(gameLoop);
-        }
-        
-        // Desenhar estrelas de fundo
-        function drawStars() {
-            ctx.fillStyle = '#E0B0FF';
-            for (let i = 0; i < 100; i++) {
-                const x = Math.random() * canvas.width;
-                const y = (Math.random() * canvas.height + (Date.now() / 50) % canvas.height) % canvas.height;
-                const size = Math.random() * 1.5;
-                const opacity = Math.random() * 0.8 + 0.2;
-                
-                ctx.globalAlpha = opacity;
-                ctx.fillRect(x, y, size, size);
-                ctx.globalAlpha = 1;
-            }
-        }
-        
-        // Iniciar jogo
-        function startGame() {
-            // Resetar jogo
-            asteroids = [];
-            score = 0;
-            scoreDisplay.textContent = score;
-            player.x = canvas.width / 2 - 15;
-            asteroidSpawnRate = 2000;
-            
-            // Esconder telas
-            startScreen.style.display = 'none';
-            gameOverScreen.style.display = 'none';
-            
-            // Iniciar loop
-            gameRunning = true;
-            lastTime = performance.now();
-            lastAsteroidSpawn = lastTime;
-            animationId = requestAnimationFrame(gameLoop);
-        }
-        
-        // Finalizar jogo
-        function endGame() {
-            gameRunning = false;
-            cancelAnimationFrame(animationId);
-            
-            // Atualizar recorde
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('spaceHighScore', highScore);
-                highScoreDisplay.textContent = highScore;
-            }
-            
-            // Mostrar tela de game over
-            finalScoreDisplay.textContent = score;
-            finalHighScoreDisplay.textContent = highScore;
-            gameOverScreen.style.display = 'flex';
-        }
-        
-        // Event listeners
-        startButton.addEventListener('click', startGame);
-        restartButton.addEventListener('click', startGame);
-        
-        // Desenhar estrelas na tela inicial
-        function drawMenuStars() {
-            const menuCtx = document.createElement('canvas').getContext('2d');
-            menuCtx.canvas.width = canvas.width;
-            menuCtx.canvas.height = canvas.height;
-            
-            menuCtx.fillStyle = '#E0B0FF';
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * menuCtx.canvas.width;
-                const y = Math.random() * menuCtx.canvas.height;
-                const size = Math.random() * 1.5;
-                const opacity = Math.random() * 0.5 + 0.1;
-                
-                menuCtx.globalAlpha = opacity;
-                menuCtx.fillRect(x, y, size, size);
-                menuCtx.globalAlpha = 1;
-            }
-            
-            startScreen.style.backgroundImage = `url(${menuCtx.canvas.toDataURL()})`;
-        }
-        
-        drawMenuStars();
-    </script>
+    <!-- JavaScript Files -->
+    <script src="js/audio.js"></script>
+    <script src="js/collision.js"></script>
+    <script src="js/powerups.js"></script>
+    <script src="js/projectiles.js"></script>
+    <script src="js/enemies.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
