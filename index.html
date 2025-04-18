@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Space Raiders - Asteroid Master</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <canvas id="gameCanvas"></canvas>
         
         <div id="uiContainer">
             <div id="scoreDisplay">SCORE: <span id="score">0</span></div>
@@ -42,9 +42,9 @@
         </div>
         
         <div id="mobileControls">
-            <button id="leftButton" class="mobile-btn">←</button>
-            <button id="fireButton" class="mobile-btn">FIRE</button>
-            <button id="rightButton" class="mobile-btn">→</button>
+            <button id="leftButton" class="mobile-btn"><span class="control-icon">←</span></button>
+            <button id="fireButton" class="mobile-btn fire-btn"><span class="control-icon">FIRE</span></button>
+            <button id="rightButton" class="mobile-btn"><span class="control-icon">→</span></button>
         </div>
     </div>
 

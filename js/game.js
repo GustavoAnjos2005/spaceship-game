@@ -2,8 +2,10 @@ class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
+        
+        // Set initial size
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
         
         this.gameTime = 0;
         this.lastTime = 0;
@@ -20,27 +22,33 @@ class Game {
         this.audio = new AudioController();
         this.collision = new Collision(this);
         
-        this.assets = {
-            images: {},
-            spritesLoaded: false,
-            explosionFrames: 6,
-            explosionFrameWidth: 64,
-            explosionFrameHeight: 64
-        };
+        this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
         
         this.init();
     }
     
-    loadImage(src) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = () => {
-                console.error(`Erro ao carregar imagem: ${src}`);
-                reject();
-            };
-            img.src = src;
-        });
+    resizeCanvas() {
+        if (this.isMobile) {
+            // For mobile, use full window size with controls area
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const controlsHeight = isLandscape ? 60 : 80;
+            
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight - controlsHeight;
+            
+            // Reposition player
+            if (this.player) {
+                this.player.x = this.canvas.width / 2 - this.player.width / 2;
+                this.player.y = this.canvas.height - this.player.height - 20;
+            }
+        } else {
+            // For desktop, use fixed size
+            this.canvas.width = 800;
+            this.canvas.height = 600;
+        }
+        
+        this.width = this.canvas.width;
+        this.height = this.canvas.height;
     }
     
     init() {
@@ -53,9 +61,9 @@ class Game {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         document.addEventListener('keyup', (e) => this.handleKeyUp(e));
         
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-            document.getElementById('mobileControls').style.display = 'flex';
+        if (this.isMobile) {
             this.setupMobileControls();
+            document.getElementById('mobileControls').style.display = 'flex';
         }
     }
     
@@ -64,12 +72,46 @@ class Game {
         const rightBtn = document.getElementById('rightButton');
         const fireBtn = document.getElementById('fireButton');
 
-        leftBtn.addEventListener('touchstart', () => this.player.moveLeft());
-        leftBtn.addEventListener('touchend', () => this.player.stopLeft());
-        rightBtn.addEventListener('touchstart', () => this.player.moveRight());
-        rightBtn.addEventListener('touchend', () => this.player.stopRight());
-        fireBtn.addEventListener('touchstart', () => this.player.startFiring());
-        fireBtn.addEventListener('touchend', () => this.player.stopFiring());
+        // Touch events
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.player.moveLeft();
+        });
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.player.stopMoving();
+        });
+        
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.player.moveRight();
+        });
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.player.stopMoving();
+        });
+        
+        fireBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.player.startFiring();
+        });
+        fireBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.player.stopFiring();
+        });
+        
+        // Mouse events for testing on desktop
+        leftBtn.addEventListener('mousedown', () => this.player.moveLeft());
+        leftBtn.addEventListener('mouseup', () => this.player.stopMoving());
+        rightBtn.addEventListener('mousedown', () => this.player.moveRight());
+        rightBtn.addEventListener('mouseup', () => this.player.stopMoving());
+        fireBtn.addEventListener('mousedown', () => this.player.startFiring());
+        fireBtn.addEventListener('mouseup', () => this.player.stopFiring());
+        
+        // Prevent page scroll when touching controls
+        document.getElementById('mobileControls').addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
     }
     
     handleKeyDown(e) {
@@ -91,10 +133,8 @@ class Game {
     handleKeyUp(e) {
         switch(e.key) {
             case 'ArrowLeft':
-                this.player.stopLeft();
-                break;
             case 'ArrowRight':
-                this.player.stopRight();
+                this.player.stopMoving();
                 break;
             case ' ':
                 this.player.stopFiring();
@@ -114,7 +154,7 @@ class Game {
         
         this.ui.hideScreens();
         this.ui.updateScore(this.score);
-        this.ui.updateHealth(this.player.health, this.player.shield);
+        this.ui.updateHealth(this.player.health);
         this.ui.updateWeapon(this.player.currentWeapon.toUpperCase());
         
         this.gameRunning = true;
@@ -195,7 +235,7 @@ class Game {
         this.gameRunning = false;
         cancelAnimationFrame(this.animationId);
         this.audio.stopBackground();
-        this.audio.playGameOver();
+        this.audio.playExplosion();
         this.ui.showGameOver(this.score, this.highScore);
     }
 }

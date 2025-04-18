@@ -3,6 +3,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    touch-action: manipulation;
 }
 
 body {
@@ -47,6 +48,7 @@ body {
     font-size: 14px;
     text-shadow: 0 0 5px rgba(224, 176, 255, 0.7);
     pointer-events: none;
+    z-index: 15;
 }
 
 #healthDisplay {
@@ -145,26 +147,35 @@ p {
 
 /* Mobile Controls */
 #mobileControls {
-    position: absolute;
-    bottom: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
     display: none;
-    justify-content: center;
-    gap: 20px;
-    z-index: 10;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(10, 8, 24, 0.7);
+    z-index: 30;
+    gap: 15px;
 }
 
 .mobile-btn {
     background-color: rgba(90, 13, 143, 0.7);
     color: white;
     border: none;
-    width: 80px;
     height: 60px;
     border-radius: 10px;
     font-size: 24px;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: 0 0 10px rgba(90, 13, 143, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    touch-action: manipulation;
 }
 
 .mobile-btn:active {
@@ -176,6 +187,16 @@ p {
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    flex: 2;
+    margin: 0 10px;
+}
+
+.control-icon {
+    pointer-events: none;
+}
+
+.fire-btn {
+    background-color: rgba(255, 50, 50, 0.7) !important;
 }
 
 /* Animations */
@@ -190,15 +211,81 @@ p {
     100% { box-shadow: 0 0 10px #e0b0ff; }
 }
 
-/* Responsive */
+/* Responsive Adjustments */
 @media (max-width: 850px) {
     #gameContainer {
-        width: 100%;
+        width: 100vw;
         height: 100vh;
         border-radius: 0;
+        border: none;
+    }
+    
+    #gameCanvas {
+        height: calc(100% - 80px);
     }
     
     #mobileControls {
         display: flex;
+        height: 80px;
+    }
+    
+    #uiContainer {
+        font-size: 12px;
+        padding: 0 10px;
+        flex-wrap: wrap;
+    }
+    
+    #healthDisplay {
+        order: 1;
+        width: 100%;
+        margin-top: 5px;
+        justify-content: center;
+    }
+    
+    .health-bar {
+        width: 80px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Landscape orientation */
+@media (max-width: 850px) and (orientation: landscape) {
+    #gameCanvas {
+        height: calc(100% - 60px);
+    }
+    
+    #mobileControls {
+        height: 60px;
+    }
+    
+    .mobile-btn {
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    #fireButton {
+        font-size: 14px;
+    }
+    
+    #uiContainer {
+        flex-wrap: nowrap;
+    }
+    
+    #healthDisplay {
+        order: 0;
+        width: auto;
+        margin-top: 0;
     }
 }
