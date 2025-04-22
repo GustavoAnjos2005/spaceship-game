@@ -9,27 +9,34 @@
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
+        <div id="gameWrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
         
         <div id="uiContainer">
-            <div id="scoreDisplay">SCORE: <span id="score">0</span></div>
-            <div id="highScoreDisplay">RECORD: <span id="highScore">0</span></div>
-            <div id="healthDisplay">
-                <div class="health-bar">
-                    <div class="health-fill"></div>
-                </div>
-                <span>SHIELD: 100%</span>
+            <div class="ui-top">
+                <div id="scoreDisplay">SCORE: <span id="score">0</span></div>
+                <div id="highScoreDisplay">RECORD: <span id="highScore">0</span></div>
+                <div id="weaponDisplay">WEAPON: BASIC</div>
+                <div id="shieldDisplay">SHIELD: <span class="shield-value">0%</span></div>
             </div>
-            <div id="weaponDisplay">WEAPON: BASIC</div>
+            <div class="ui-bottom">
+                <div id="healthDisplay">
+                    <div class="health-bar">
+                        <div class="health-fill"></div>
+                    </div>
+                    <span class="health-text">100%</span>
+                </div>
+            </div>
         </div>
         
         <div id="startScreen" class="screen">
             <h1>SPACE RAIDERS</h1>
             <h2>Asteroid Master</h2>
             <div class="controls">
-                <p>CONTROLS: <span class="highlight">← →</span> TO MOVE | <span class="highlight">SPACE</span> TO SHOOT</p>
-                <p>DESTROY ASTEROIDS AND ENEMIES TO SCORE</p>
-                <p>COLLECT POWER-UPS FOR SPECIAL ABILITIES</p>
+                <p>CONTROLS: <span class="highlight">← →</span> TO MOVE</p>
+                <p><span class="highlight">SPACE</span> TO SHOOT</p>
+                <p>COLLECT POWER-UPS TO SURVIVE</p>
             </div>
             <button id="startButton" class="btn">START MISSION</button>
         </div>
@@ -48,7 +55,6 @@
         </div>
     </div>
 
-    <!-- JavaScript Files -->
     <script src="js/audio.js"></script>
     <script src="js/collision.js"></script>
     <script src="js/powerups.js"></script>
